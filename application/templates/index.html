@@ -7,6 +7,10 @@
     <title>Book recommendation System</title>
 </head>
 <body>
-    <h1>Book recommendation System</h1>
+    <h1>Book recommendation System </h1>
+   <p> {{top['Book-Title']}}</p>
+   {% for book in avgwtData %}
+    <p>{{book['Book-Title'].values[0]}}</p><br>
+    {% endfor %}
 </body>
 </html>
