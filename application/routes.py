@@ -1,5 +1,5 @@
 from application import app;
-from flask import render_template
+from flask import render_template, request, json , Response
 
 import pickle
 import numpy as np
@@ -101,13 +101,54 @@ def index():
     print("Recommended Books:-\n")
     top=df.head(20)
     top.reset_index(inplace=True);
-    print(top)
+    #print(top)
     res=[]
     for i in range(20):
         getbook=book_data.loc[book_data['Book-Title'] == top['Book-Title'][i],:]
         getbook.reset_index(inplace=True);
         getbook=book_data.loc[book_data['ISBN'] == getbook['ISBN'][0],:]
         res.append(getbook)
-    print (res)
-    return render_template("index.html",top=top,avgwtData=res)
-    
+    #print (res)
+    return render_template("index.html",top=top,ResData=res)
+
+@app.route("/searchbook",methods=["GET","POST"])
+def searchbook():
+    authorbooks=[]
+    pubBooks=[]
+    def printBook(k, n):
+        res=[]
+        z = k['Book-Title'].unique()
+        for x in range(len(z)):
+            res.append(z[x])
+            if x >= n-1:
+                print(res)
+                return res
+    def get_books(dataframe, name, n):
+        print("\nBooks by same Author:\n")
+        d = dataframe[dataframe['Book-Title'] == bookName]
+        #print(d)
+        au = d['Book-Author'].unique()
+        print(au)
+        data = dataset1[dataset1['Book-Title'] != name]
+
+        if au[0] in list(data['Book-Author'].unique()):
+            k2 = data[data['Book-Author'] == au[0]]
+        k2 = k2.sort_values(by=['Book-Rating'])
+        authorbooks=printBook(k2, n)
+
+        print("\n\nBooks by same Publisher:\n")
+        au = d['Publisher'].unique()
+        print(au)
+        if au[0] in list(data['Publisher'].unique()):
+            k2 = pd.DataFrame(data[data['Publisher'] == au[0]])
+        k2=k2.sort_values(by=['Book-Rating']) 
+        pubBooks=printBook(k2, n)
+    bookName=request.form.get('search') # Harry Potter and the Sorcerer's Stone (Harry Potter (Paperback))
+    number=10
+    if bookName in list(dataset1['Book-Title'].unique()):
+        get_books(dataset1, bookName, number)
+    else:
+        print("Invalid Book Name!!")
+    print(authorbooks , pubBooks)
+        #authorbooks  pubBooks
+    return "<h1>sucess</h1>"

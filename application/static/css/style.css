@@ -1,0 +1,56 @@
+*{
+    margin:0;
+    padding: 0;
+}
+body{
+	 background-image: url("https://odishalinks.com/wp-content/uploads/2022/04/old-book-flying-letters-magic-light-background-bookshelf-library-ancient-books-as-symbol-knowledge-history-218640948-1000x600.jpg");
+    font-family: 'Courier New', Courier, monospace;
+	color:white;
+	overflow-x:hidden;
+}
+h1{
+    color: red;
+}
+.flex_container{
+   display: flex;
+   flex-direction: column; 
+   float: left;
+    margin: 15px;
+	justify-content:center;
+	align-items:center;
+	width:250px;
+	height:420px;
+	background-color:#665858;
+}
+.flex_container >div{
+  justify-content:center;
+	align-items:center;
+	width:200px;
+}
+.flex_container>div>img{
+    width: 200px;
+    height: 300px;
+}
+form{
+	text-align:center;
+}
+input[type=text] {
+    width: 50%;
+    text-align: center;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 20px;
+    background-color: white;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+  }
+  
+  input[type=text]:focus {
+    width: 90%;
+  }

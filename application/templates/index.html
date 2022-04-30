@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book recommendation System</title>
-</head>
-<body>
-    <h1>Book recommendation System </h1>
-   <p> {{top['Book-Title']}}</p>
-   {% for book in avgwtData %}
-    <p>{{book['Book-Title'].values[0]}}</p><br>
+{% extends "layout.html" %}
+{% block content %}
+    {% for book in ResData %}
+    <div class="flex_container">
+        <div class="Book_image">
+            <img src={{book['Image-URL-M'].values[0]}} alt={{book['Book-Title'].values[0]}}>
+        </div>
+        <div>
+            <ul>
+                <li class="title">
+                    <b>{{book['Book-Title'].values[0]}}</b>
+                </li>
+                <li class="Author">
+                    <b>{{book['Book-Author'].values[0]}}</b>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
