@@ -1,5 +1,5 @@
 from application import app;
-from flask import render_template, request, json , Response
+from flask import render_template, request, json , Response,redirect,url_for
 
 import pickle
 import numpy as np
@@ -103,26 +103,35 @@ def index():
     top.reset_index(inplace=True);
     #print(top)
     res=[]
-    for i in range(20):
+    for i in range(len(top)):
         getbook=book_data.loc[book_data['Book-Title'] == top['Book-Title'][i],:]
-        getbook.reset_index(inplace=True);
+        getbook.reset_index(inplace=True)
         getbook=book_data.loc[book_data['ISBN'] == getbook['ISBN'][0],:]
         res.append(getbook)
     #print (res)
-    return render_template("index.html",top=top,ResData=res)
+    return render_template("index.html",str="TOP RATED BOOKS",Res=res)
 
 @app.route("/searchbook",methods=["GET","POST"])
 def searchbook():
+    bookName=request.form.get('search')
+    algorithm=request.form.get('algorithm')
+    if(algorithm=="1"):
+        return redirect(url_for('index'))
+    elif(algorithm=="2"):
+        return redirect(url_for('sameAuthor',bName=bookName))
+    elif(algorithm=="3"):
+        return redirect(url_for('samePublisher',bName=bookName))
+
+@app.route("/sameAuthor")
+def sameAuthor():
     authorbooks=[]
-    pubBooks=[]
-    def printBook(k, n):
-        res=[]
+    def printBook(arr,k, n):
+        
         z = k['Book-Title'].unique()
         for x in range(len(z)):
-            res.append(z[x])
+            arr.append(z[x])
             if x >= n-1:
-                print(res)
-                return res
+                break
     def get_books(dataframe, name, n):
         print("\nBooks by same Author:\n")
         d = dataframe[dataframe['Book-Title'] == bookName]
@@ -134,21 +143,54 @@ def searchbook():
         if au[0] in list(data['Book-Author'].unique()):
             k2 = data[data['Book-Author'] == au[0]]
         k2 = k2.sort_values(by=['Book-Rating'])
-        authorbooks=printBook(k2, n)
+        printBook(authorbooks,k2, n)
 
-        print("\n\nBooks by same Publisher:\n")
-        au = d['Publisher'].unique()
-        print(au)
-        if au[0] in list(data['Publisher'].unique()):
-            k2 = pd.DataFrame(data[data['Publisher'] == au[0]])
-        k2=k2.sort_values(by=['Book-Rating']) 
-        pubBooks=printBook(k2, n)
-    bookName=request.form.get('search') # Harry Potter and the Sorcerer's Stone (Harry Potter (Paperback))
-    number=10
+    bookName=request.args.get('bName') # Harry Potter and the Sorcerer's Stone (Harry Potter (Paperback))
+    number=20
     if bookName in list(dataset1['Book-Title'].unique()):
         get_books(dataset1, bookName, number)
     else:
         print("Invalid Book Name!!")
-    print(authorbooks , pubBooks)
-        #authorbooks  pubBooks
-    return "<h1>sucess</h1>"
+    ab=[]
+
+    for i in range(len(authorbooks)):
+        getbook=book_data.loc[book_data['Book-Title'] == authorbooks[i],:]
+        getbook.reset_index(inplace=True)
+        getbook=book_data.loc[book_data['ISBN'] == getbook['ISBN'][0],:]
+        ab.append(getbook)
+    return render_template("index.html",Res=ab,str="Books by Same Author")
+
+@app.route("/samePublisher")
+def samePublisher():
+    pubBooks=[]
+    def printBook(arr,k, n):
+        
+        z = k['Book-Title'].unique()
+        for x in range(len(z)):
+            arr.append(z[x])
+            if x >= n-1:
+                break
+    def get_books(dataframe, name, n):
+        d = dataframe[dataframe['Book-Title'] == bookName]
+        print("\n\nBooks by same Publisher:\n")
+        au = d['Publisher'].unique()
+        print(au)
+        data = dataset1[dataset1['Book-Title'] != name]
+        if au[0] in list(data['Publisher'].unique()):
+            k2 = pd.DataFrame(data[data['Publisher'] == au[0]])
+        k2=k2.sort_values(by=['Book-Rating']) 
+        printBook(pubBooks,k2, n)
+    bookName=request.args.get('bName') # Harry Potter and the Sorcerer's Stone (Harry Potter (Paperback))
+    number=20
+    if bookName in list(dataset1['Book-Title'].unique()):
+        get_books(dataset1, bookName, number)
+    else:
+        print("Invalid Book Name!!")
+    pb=[]
+    for i in range(len(pubBooks)):
+        getbook=book_data.loc[book_data['Book-Title'] == pubBooks[i],:]
+        getbook.reset_index(inplace=True)
+        getbook=book_data.loc[book_data['ISBN'] == getbook['ISBN'][0],:]
+        pb.append(getbook)
+    return render_template("index.html",Res=pb,str="Books by Same Publisher")
+

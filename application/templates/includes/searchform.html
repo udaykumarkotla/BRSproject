@@ -1,3 +1,12 @@
 <form action="{{url_for('searchbook')}}" method="post">
     <input type="text" name="search" placeholder="Search Book Name...">
+    <div class="select">
+        <select name="algorithm">
+          <option value="1">Top Rated Books</option>
+          <option value="2">Books by Same Author</option>
+          <option value="3">Books by Same Publisher</option>
+          <option value="4">Collaborative </option>
+          <option value="5">Nearest Neighbour </option>
+        </select>
+      </div>
 </form>
