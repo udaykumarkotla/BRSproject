@@ -10,10 +10,21 @@
         <div>
             <ul>
                 <li class="title">
-                    <b>{{book['Book-Title'].values[0]}}</b>
+                 <b>Book:</b>   {{book['Book-Title'].values[0]}}
                 </li>
                 <li class="Author">
-                    <b>{{book['Book-Author'].values[0]}}</b>
+                    <b>Author:</b>{{book['Book-Author'].values[0]}}
+                </li>
+                <li>
+                    
+                    <form action="{{url_for('bookDetails')}}" method="POST">
+                        <input type="hidden" name="bname" value="{{book['Book-Title'].values[0]}}">
+                        <input type="hidden" name="author" value="{{book['Book-Author'].values[0]}}">
+                        <input type="hidden" name="yop" value="{{book['Year-Of-Publication'].values[0]}}">
+                        <input type="hidden" name="publisher" value="{{book['Publisher'].values[0]}}">
+                        <input type="hidden" name="bimage" value="{{book['Image-URL-M'].values[0]}}">
+                        <button class="button" style="vertical-align:middle"><span>Book Details </span></button>
+                    </form>
                 </li>
             </ul>
         </div>

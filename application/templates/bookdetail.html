@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="bimg">
+    <p><br><h1>{{str}}</h1><br></p>
+    <ul>
+    <li>
+        <img src={{img}} alt={{bname}}>
+    </li>
+    <li >
+    <b>Book:</b>   {{bname}}
+    </li>
+    <li >
+        <b>Author:</b>{{au}}
+    </li>
+    <li >
+        <b> Publisher:</b>{{pb}}
+    </li>
+    <li >
+        <b> Year-Of-Publication:</b> {{yop}}
+    </li>
+    </ul>
+</div>
+{% endblock %}
